@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {ScrollView, View, StyleSheet} from 'react-native';
 import React from 'react';
 import ReactSVG from './src/pages/ReactSVG/ReactSVG';

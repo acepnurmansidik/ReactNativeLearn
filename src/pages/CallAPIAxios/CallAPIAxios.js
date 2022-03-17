@@ -15,21 +15,21 @@ export default function CallAPIAxios() {
     email: '',
   });
   // Handle =================================
-  const handleGetData = async () => {
-    await axios
+  const handleGetData = () => {
+    axios
       .get('https://reqres.in/api/users/5')
       .then(result => {
         setDataUser(result.data.data);
       })
-      .catth(err => console.log('Error: ', err));
+      .catch(err => console.log('Error: ', err));
   };
 
-  const handlePostData = async () => {
+  const handlePostData = () => {
     const dataForAPI = {
       name: 'lyna riyana',
       email: 'lyna@gmail.com',
     };
-    await axios
+    axios
       .post('https://reqres.in/api/users', dataForAPI)
       .then(result => {
         setDataResult(result.data);
