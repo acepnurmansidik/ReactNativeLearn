@@ -1,20 +1,20 @@
 import {StyleSheet, Text, View, TextInput, Button, Image} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Axios from 'axios';
 
-const Item = () => {
+const Item = ({name, email, bidang}) => {
   return (
     <View style={styles.itemContainer}>
       <Image
         source={{
-          uri: 'https://api.adorable.io/avatars/150/acep@adorable.io.png',
+          uri: `https://api.adorable.io/avatars/150/${email}.png`,
         }}
         style={styles.avatar}
       />
       <View style={styles.desc}>
-        <Text style={styles.descName}>Fullname</Text>
-        <Text style={styles.descEmail}>Email</Text>
-        <Text style={styles.descBidang}>Bidang</Text>
+        <Text style={styles.descName}>{name}</Text>
+        <Text style={styles.descEmail}>{email}</Text>
+        <Text style={styles.descBidang}>{bidang}</Text>
       </View>
       <Text style={styles.delete}>X</Text>
     </View>
@@ -25,6 +25,11 @@ export default function LocalAPI() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [bidang, setBidang] = useState('');
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleOnSubmit = () => {
     const data = {
@@ -34,10 +39,16 @@ export default function LocalAPI() {
     };
 
     Axios.post('http://10.0.2.2:3004/users', data).then(result => {
-      console.log('result: ', result);
       setName('');
       setEmail('');
       setBidang('');
+      getData();
+    });
+  };
+
+  const getData = () => {
+    Axios.get('http://10.0.2.2:3004/users').then(res => {
+      setUsers(res.data);
     });
   };
   return (
@@ -64,7 +75,16 @@ export default function LocalAPI() {
       />
       <Button title="Save" onPress={handleOnSubmit} />
       <View style={styles.line} />
-      <Item />
+      {users.map(user => {
+        return (
+          <Item
+            key={user.id}
+            name={user.name}
+            email={user.email}
+            bidang={user.bidang}
+          />
+        );
+      })}
     </View>
   );
 }

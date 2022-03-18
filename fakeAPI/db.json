@@ -23,6 +23,24 @@
       "email": "siska@gmail.com",
       "bidang": "Back-End",
       "id": 4
+    },
+    {
+      "name": "shantika",
+      "email": "shantika@gmail.com",
+      "bidang": "Mobile App",
+      "id": 5
+    },
+    {
+      "name": "lydia",
+      "email": "lydia@gmail.com",
+      "bidang": "Full-Stack Dev",
+      "id": 6
+    },
+    {
+      "name": "Reza",
+      "email": "reza@gmail.com",
+      "bidang": "DevOps",
+      "id": 7
     }
   ]
 }
