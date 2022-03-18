@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View, TextInput, Button, Image} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import Axios from 'axios';
 
 const Item = () => {
   return (
@@ -21,14 +22,47 @@ const Item = () => {
 };
 
 export default function LocalAPI() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [bidang, setBidang] = useState('');
+
+  const handleOnSubmit = () => {
+    const data = {
+      name,
+      email,
+      bidang,
+    };
+
+    Axios.post('http://10.0.2.2:3004/users', data).then(result => {
+      console.log('result: ', result);
+      setName('');
+      setEmail('');
+      setBidang('');
+    });
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Local API (JSON Server)</Text>
       <Text style={styles.normalTxt}>Masukan Anggota Kabayan Koding</Text>
-      <TextInput placeholder="Fullname" style={styles.inputField} />
-      <TextInput placeholder="Email" style={styles.inputField} />
-      <TextInput placeholder="Bidang" style={styles.inputField} />
-      <Button title="Save" />
+      <TextInput
+        placeholder="Fullname"
+        style={styles.inputField}
+        value={name}
+        onChangeText={value => setName(value)}
+      />
+      <TextInput
+        placeholder="Email"
+        style={styles.inputField}
+        value={email}
+        onChangeText={value => setEmail(value)}
+      />
+      <TextInput
+        placeholder="Bidang"
+        style={styles.inputField}
+        value={bidang}
+        onChangeText={value => setBidang(value)}
+      />
+      <Button title="Save" onPress={handleOnSubmit} />
       <View style={styles.line} />
       <Item />
     </View>

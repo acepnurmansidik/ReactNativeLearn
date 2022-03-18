@@ -1,24 +1,28 @@
 {
-  "posts": [
+  "users": [
     {
       "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "name": "acep",
+      "email": "acepnurmansidik@gmail.com",
+      "bidang": "Full-Stack Dev"
     },
     {
-      "title": "Cybertron",
-      "author": "Acep Nurman Sidik",
+      "name": "naila",
+      "email": "naila.bahrul@gmail.com",
+      "bidang": "Mobile App",
       "id": 2
-    }
-  ],
-  "comments": [
+    },
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "name": "lyna",
+      "email": "lyna@gmail.com",
+      "bidang": "Front-End",
+      "id": 3
+    },
+    {
+      "name": "siska",
+      "email": "siska@gmail.com",
+      "bidang": "Back-End",
+      "id": 4
     }
-  ],
-  "profile": {
-    "name": "typicode"
-  }
+  ]
 }
