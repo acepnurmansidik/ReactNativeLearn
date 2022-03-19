@@ -1,22 +1,35 @@
-import {StyleSheet, Text, View, TextInput, Button, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Axios from 'axios';
 
-const Item = ({name, email, bidang}) => {
+const Item = ({name, email, bidang, onPress, onDelete}) => {
   return (
     <View style={styles.itemContainer}>
-      <Image
-        source={{
-          uri: `https://api.adorable.io/avatars/150/${email}.png`,
-        }}
-        style={styles.avatar}
-      />
+      <TouchableOpacity onPress={onPress}>
+        <Image
+          source={{
+            uri: `https://api.adorable.io/avatars/150/${email}.png`,
+          }}
+          style={styles.avatar}
+        />
+      </TouchableOpacity>
       <View style={styles.desc}>
         <Text style={styles.descName}>{name}</Text>
         <Text style={styles.descEmail}>{email}</Text>
         <Text style={styles.descBidang}>{bidang}</Text>
       </View>
-      <Text style={styles.delete}>X</Text>
+      <TouchableOpacity onPress={onDelete}>
+        <Text style={styles.delete}>X</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -26,6 +39,8 @@ export default function LocalAPI() {
   const [email, setEmail] = useState('');
   const [bidang, setBidang] = useState('');
   const [users, setUsers] = useState([]);
+  const [button, setButton] = useState('Save');
+  const [selectUser, setSelectUser] = useState({});
 
   useEffect(() => {
     getData();
@@ -38,18 +53,44 @@ export default function LocalAPI() {
       bidang,
     };
 
-    Axios.post('http://10.0.2.2:3004/users', data).then(result => {
-      setName('');
-      setEmail('');
-      setBidang('');
-      getData();
-    });
+    if (button === 'Save') {
+      Axios.post('http://10.0.2.2:3004/users', data).then(result => {
+        setName('');
+        setEmail('');
+        setBidang('');
+        getData();
+      });
+    } else {
+      Axios.put(`http://10.0.2.2:3004/users/${selectUser.id}`, data).then(
+        res => {
+          setName('');
+          setEmail('');
+          setBidang('');
+          setButton('Save');
+          getData();
+        },
+      );
+    }
   };
 
   const getData = () => {
     Axios.get('http://10.0.2.2:3004/users').then(res => {
       setUsers(res.data);
     });
+  };
+
+  const selectedItem = item => {
+    setName(item.name);
+    setEmail(item.email);
+    setBidang(item.bidang);
+    setButton('Update');
+    setSelectUser(item);
+  };
+
+  const onDelete = item => {
+    Axios.delete(`http://10.0.2.2:3004/users/${item.id}`).then(res =>
+      getData(),
+    );
   };
   return (
     <View style={styles.container}>
@@ -73,7 +114,7 @@ export default function LocalAPI() {
         value={bidang}
         onChangeText={value => setBidang(value)}
       />
-      <Button title="Save" onPress={handleOnSubmit} />
+      <Button title={`${button}`} onPress={handleOnSubmit} />
       <View style={styles.line} />
       {users.map(user => {
         return (
@@ -82,6 +123,19 @@ export default function LocalAPI() {
             name={user.name}
             email={user.email}
             bidang={user.bidang}
+            onPress={() => selectedItem(user)}
+            onDelete={() =>
+              Alert.alert('Warning', 'Are sure delete this user?', [
+                {
+                  text: 'No',
+                  onPress: () => console.log('Not delete'),
+                },
+                {
+                  text: 'Yes',
+                  onPress: () => onDelete(onDelete(user)),
+                },
+              ])
+            }
           />
         );
       })}
